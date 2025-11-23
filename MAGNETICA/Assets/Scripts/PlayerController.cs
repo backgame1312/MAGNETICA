@@ -27,6 +27,13 @@ public class PlayerController : MonoBehaviour
     public bool isAlive = true;
     public bool canRun = false;
 
+    [Header("Speed Setting")]
+    public float speedIncreaseInterval = 10f; //시간 간격
+    public float speedIncreaseAmount = 5f; //속도 증가량
+    public float maxRunSpeed = 100; //속도 최대량
+
+    private float speedTimer = 0f; //경과 시간 체크용
+
     Rigidbody2D rb;
 
     //레인 상태
@@ -74,6 +81,16 @@ public class PlayerController : MonoBehaviour
     {
         if (!isAlive) return;
         if (!canRun) return;
+
+        //일정 시간마다 스피드 증가
+        speedTimer += Time.deltaTime;
+        if(speedTimer >= speedIncreaseInterval)
+        {
+            runSpeed += speedIncreaseAmount;
+            runSpeed = Mathf.Clamp(runSpeed, 0f, maxRunSpeed);
+
+            speedTimer = 0f;
+        }
 
         //X방향 자동 이동
         transform.Translate(Vector2.right * runSpeed * Time.deltaTime);
