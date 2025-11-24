@@ -3,9 +3,12 @@ using UnityEngine;
 public class RocketSpawner : MonoBehaviour
 {
     public GameObject rocketPrefab;
-    public Transform player;      // 플레이어 Transform 참조
+    public Transform player;
     public float spawnInterval = 2f;
-    public float distanceX = 50f; // 플레이어 기준 X 거리
+    public float distanceX = 50f;
+    public float spawnY = 0f;
+
+    private PlayerController playerController;
 
     private void Start()
     {
@@ -16,9 +19,14 @@ public class RocketSpawner : MonoBehaviour
     {
         if (player == null) return;
 
-        // 플레이어 y 그대로, x는 +distanceX
-        Vector3 spawnPos = new Vector3(player.position.x + distanceX, player.position.y, 0);
+        if (playerController.currentPolarity != Polarity.N) return;
 
-        Instantiate(rocketPrefab, spawnPos, Quaternion.identity);
+        Vector3 spawnPos = new Vector3(
+            player.position.x + distanceX,
+            spawnY,
+            0f
+        );
+
+        Instantiate(rocketPrefab, spawnPos, rocketPrefab.transform.rotation);
     }
 }
