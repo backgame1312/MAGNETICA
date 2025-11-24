@@ -1,6 +1,4 @@
-﻿using NUnit.Framework.Constraints;
-using TreeEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum Polarity { N, S }
 
@@ -10,33 +8,46 @@ public class PlayerController : MonoBehaviour
     public float runSpeed = 5f;
 
     [Header("Speed Settings")]
-    public float speedIncreaseInterval = 10f; // 시간 간격
-    public float speedIncreaseAmount = 5f;    // 속도 증가량
-    public float maxRunSpeed = 100f;          // 속도 최대량
+    public float speedIncreaseInterval = 10f;
+    public float speedIncreaseAmount = 5f;
+    public float maxRunSpeed = 100f;
 
     [Header("State")]
     public bool isAlive = true;
     public bool canRun = false;
+    public Polarity currentPolarity = Polarity.N;
 
-    public Polarity currentPolarity = Polarity.N;  // 플레이어 현재 극성 상태
+    [Header("Death Settings")]
+    public float minY = -28f;
+    public float maxY = 35f;
 
-    private float speedTimer = 0f; // 경과 시간 체크용
+    [Header("Ground Check")]
+    public LayerMask groundLayer;
+    public float groundCheckDistance = 0.1f;
+
+    [Header("Components")]
+    public PolygonCollider2D poly;
+    public SpriteRenderer sr;
+
+    private float speedTimer = 0f;
     private Rigidbody2D rb;
-
-    // 현재 밟고 있는 타일
     private Collider2D currentTile = null;
+
+    Animator animator;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     private void Start()
     {
         if (rb != null)
         {
-            rb.gravityScale = 20f; // 중력 빠르게 적용
+            rb.gravityScale = 20f;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
     }
 
@@ -44,7 +55,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!isAlive || !canRun) return;
 
-        // 일정 시간마다 이동 속도 증가
+        // 속도 증가
         speedTimer += Time.deltaTime;
         if (speedTimer >= speedIncreaseInterval)
         {
@@ -53,13 +64,29 @@ public class PlayerController : MonoBehaviour
             speedTimer = 0f;
         }
 
+        // Space 입력으로 자성 전환 + 애니메이션 변경
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            TogglePolarityAndFlip();
+            TogglePolarity();
+            ChangeAnimation();
+        }
+
+        // Y 한계치 이탈 사망
+        if (transform.position.y < minY || transform.position.y > maxY)
+        {
+            Die();
         }
     }
 
-    void TogglePolarityAndFlip()
+    private void FixedUpdate()
+    {
+        if (!isAlive || !canRun) return;
+
+        // X 방향 이동
+        rb.linearVelocity = new Vector2(runSpeed, rb.linearVelocity.y);
+    }
+
+    void TogglePolarity()
     {
         // 자성 전환
         currentPolarity = (currentPolarity == Polarity.N) ? Polarity.S : Polarity.N;
@@ -67,37 +94,53 @@ public class PlayerController : MonoBehaviour
         // 중력 반전
         rb.gravityScale *= -1;
 
-        // 플레이어 뒤집기(y축)
-        Vector3 scale = transform.localScale;
-        scale.y *= -1;
-        transform.localScale = scale;
+        //반전 후, 표면 보정
+        float margin = 0.05f;
+        float rayLength = 1f;
 
-        // 현재 몸이 어디 붙어있나 확인
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up * Mathf.Sign(rb.gravityScale), 0.2f);
+        // 위/아래로 레이캐스트 (중력 방향에 따라)
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            Vector2.up * Mathf.Sign(rb.gravityScale),
+            rayLength,
+            groundLayer
+        );
+
         if (hit.collider != null)
         {
             currentTile = hit.collider;
-            Debug.Log("플레이어가 새로운 표면에 붙음: " + currentTile.name);
+
+            // 캐릭터를 타일 밖으로 이동시키는 보정
+            Vector3 pos = transform.position;
+            pos.y = hit.point.y - Mathf.Sign(rb.gravityScale) * (GetComponent<Collider2D>().bounds.extents.y + margin);
+            transform.position = pos;
         }
         else
         {
-            currentTile = null; // 떠 있음
+            currentTile = null; // 공중
         }
     }
-    private void FixedUpdate()
-    {
-        if (!isAlive || !canRun) return;
 
-        // X 방향 자동 이동
-        rb.linearVelocity = new Vector2(runSpeed, rb.linearVelocity.y);
+    void ChangeAnimation()
+    {
+        var state = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (state.IsName("Run_N Animation"))
+            animator.SetTrigger("ChangeToS");
+        else if (state.IsName("Run_S Animation"))
+            animator.SetTrigger("ChangeToN");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 타일 충돌 감지
+        // 닿은 타일 저장
         currentTile = collision.collider;
-        // 밟은 타일 이름 출력 (디버깅용)
-        Debug.Log("밟은 타일: " + currentTile.name);
+
+        // 장애물 충돌 시 사망
+        if (collision.collider.CompareTag("Obstacle"))
+        {
+            Die();
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -105,19 +148,19 @@ public class PlayerController : MonoBehaviour
         if (currentTile == collision.collider)
         {
             currentTile = null;
-            Debug.Log("타일 벗어남");
         }
     }
 
     public void Die()
     {
         if (!isAlive) return;
+
         isAlive = false;
         canRun = false;
 
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.GameOver();
-        }
+
+        Destroy(gameObject);
     }
 }
