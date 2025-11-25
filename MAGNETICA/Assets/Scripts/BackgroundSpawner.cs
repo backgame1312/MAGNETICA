@@ -26,19 +26,13 @@ public class BackgroundSpawner : MonoBehaviour
 
     void Update()
     {
+        if (nextPosition.x > 3635f) return;
+
         if (Time.time >= nextSpawnTime)
         {
             // 새 배경 생성
             GameObject newBG = Instantiate(backgroundPrefab, nextPosition, Quaternion.identity);
             backgrounds.Add(newBG);
-
-            // 오래된 배경 삭제 (리스트에서 5번째 전)
-            if (backgrounds.Count > 5)
-            {
-                GameObject oldBG = backgrounds[0];
-                backgrounds.RemoveAt(0);
-                Destroy(oldBG);
-            }
 
             // 다음 배경 위치 갱신
             nextPosition.x += 115f;

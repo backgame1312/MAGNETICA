@@ -3,7 +3,7 @@
 public enum Polarity { N, S }
 
 public class PlayerController : MonoBehaviour
-{
+{ 
     [Header("Move Settings")]
     public float runSpeed = 5f;
 
@@ -33,12 +33,17 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D currentTile = null;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip jumpSfx;
+
     Animator animator;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -67,6 +72,7 @@ public class PlayerController : MonoBehaviour
         // Space 입력으로 자성 전환 + 애니메이션 변경
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            PlayJumpSound();
             TogglePolarity();
             ChangeAnimation();
         }
@@ -162,5 +168,13 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.GameOver();
 
         Destroy(gameObject);
+    }
+
+    void PlayJumpSound()
+    {
+        if (audioSource != null && jumpSfx != null)
+        {
+            audioSource.PlayOneShot(jumpSfx);
+        }
     }
 }
