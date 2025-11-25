@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a82e7b8c0bf83ad4595d29a27f28a332
+guid: b4c2e76435582e24d87fab06760bee4c
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -99,19 +99,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -119,42 +106,20 @@ TextureImporter:
       name: Exit_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 5
-        width: 254
-        height: 109
+        x: 0
+        y: 0
+        width: 399
+        height: 107
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 00aa6e5c9343055e0800000000000000
-      internalID: -1922979618149193216
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Exit_1
-      rect:
-        serializedVersion: 2
-        x: 253
-        y: 5
-        width: 89
-        height: 109
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d6a70f695e4a0b8c0800000000000000
-      internalID: -3985504364236080531
+      spriteID: d2cb312665fed4340aabffe20449dbd3
+      internalID: -1750783657
       vertices: []
       indices: 
       edges: []
@@ -163,7 +128,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7ae8df6b62e269f45bd0bc10dc79757f
     internalID: 0
     vertices: []
     indices: 
@@ -173,8 +138,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Exit_0: -1922979618149193216
-      Exit_1: -3985504364236080531
+      Exit_0: -1750783657
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
