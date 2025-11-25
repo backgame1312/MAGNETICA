@@ -122,10 +122,10 @@ TextureImporter:
       name: MAGNETICA_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 5
-        width: 682
-        height: 168
+        x: 0
+        y: 0
+        width: 1233
+        height: 177
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,55 +140,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: MAGNETICA_1
-      rect:
-        serializedVersion: 2
-        x: 699
-        y: 5
-        width: 125
-        height: 168
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ad86e1292ebe0fb00800000000000000
-      internalID: 860446887174367450
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MAGNETICA_2
-      rect:
-        serializedVersion: 2
-        x: 834
-        y: 5
-        width: 395
-        height: 168
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ba0650c47e33db630800000000000000
-      internalID: 3944365917152305323
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 0e1bae729f722054a9a933c2d1b79c60
     internalID: 0
     vertices: []
     indices: 
@@ -199,8 +155,6 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       MAGNETICA_0: -6665011033266183436
-      MAGNETICA_1: 860446887174367450
-      MAGNETICA_2: 3944365917152305323
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
